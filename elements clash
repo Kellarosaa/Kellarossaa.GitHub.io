@@ -1,0 +1,1170 @@
+<iframe id="game-iframe" title="vegas clash 3d" src="/embed/vegas/index.html?fb_locale=en&amp;invite=(none)" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>
+<div id="viewport" class="main">
+        <div id="game-container"><iframe id="game-iframe" title="vegas clash 3d" src="/embed/vegas/index.html?fb_locale=en&amp;invite=(none)" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe></div>
+
+        <div class="footer">
+			<span id="footer-embed"><a href="javascript:void(0)" onclick="return EmbedPrompt()" target="_blank" rel="nofollow">Embed</a>&nbsp;|&nbsp;</span>
+			<span id="footer-contact"><a href="https://3wayint.com" rel="noopener" target="_blank">Contacts</a></span>
+
+			<a href="/">
+				<img id="footer-site-logo" width="110" style="padding-left: 0.5em;" src="/img/clash3dcom_footer.png" alt="Clash3D.com">
+			</a>
+
+			<div style="padding-left: 0.5em; padding-top: 0.3em; display: flex; align-items: center;">
+				<div class="addthis_inline_share_toolbox_4rwo"></div>
+			</div>
+
+			<a href="/vegasclash3d" alt="Vegas Clash 3D"><img class="button" alt="Vegas Clash 3D" src="/img/vegas_menubutton.png"></a>
+			<a href="/winterclash3d" alt="Winter Clash 3D"><img class="button" alt="Winter Clash 3D" src="/img/winter_menubutton.png"></a>
+			<a href="/moonclash3d" alt="Moon Clash Heroes"><img class="button" alt="Moon Clash Heroes" src="/img/moon_menubutton.png"></a>
+
+	
+		</div>
+    </div>
+<script type="text/javascript">
+		function InjectAdinplayIframedBanner(div_tag, width, height) {
+			var banner_id = 'clash3d-com_' + width + 'x' + height;
+			var iframe_tag = 'aip' + RandomInt();
+
+			document.getElementById(div_tag).innerHTML =
+				'<iframe id="' + iframe_tag + '" src="//clash3d.com/aip/aipbnr10.html?id=' + encodeURIComponent(banner_id) + '" ' +
+				'frameborder="0" scrolling="no" marginwidth="0" marginheight="0" width="' + width + '" height="' + height + '" referrerpolicy="no-referrer" ' +
+				'></iframe>'
+				;
+		}
+
+		function WatchFillrate(targetNode, width, height) {
+			const config = { attributes: false, childList: true, subtree: false };
+			var filler_div;
+
+			const timeout_id = setTimeout(function () {
+				console.debug('WatchFillrate: no fill');
+
+				filler_div = document.createElement('div');
+				filler_div.setAttribute('id', 'filler');
+				filler_div.setAttribute("style", "width: 100%; height: 100%; z-index: 0; position: absolute; left: 0; top: 0;");
+				document.body.insertBefore(filler_div, targetNode);
+
+				InjectAdinplayIframedBanner(filler_div, width, height);
+			}, 1700);
+
+			const callback = function(mutationsList, observer) {
+				for (const mutation of mutationsList) {
+					if (mutation.type !== 'childList')
+						continue;
+
+					console.debug('WatchFillrate: mutation encounter');
+
+					if (filler_div) {
+						console.debug('WatchFillrate: removing previously injected filler');
+						filler_div.parentNode.removeChild(filler_div);
+						observer.disconnect();
+
+					} else {
+						clearTimeout(timeout_id);
+					}
+
+					return;
+				}
+			};
+
+			const observer = new MutationObserver(callback);
+			observer.observe(targetNode, config);
+
+			console.debug('WatchFillrate: mutation observer started');
+		}
+
+        function JS_InjectAdsenseBanners(full_size, midblock_size, landscape, banner1_param, banner2_param) {
+            console.log('Adsense banners:', full_size, midblock_size, landscape, banner1_param, banner2_param);
+
+            var miblock_size_ratio = midblock_size / full_size;
+            if (miblock_size_ratio > 0.9)
+                return;
+
+            function generate_ins(param) {
+                var params = param.split('|');
+                var type = params[0];
+
+                if (type === 'responsive') {
+                    return '<ins class="adsbygoogle" ' +
+                            'style="display:block; width: 100%; height: 100%;" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + params[1] + '" ' +
+                            'data-ad-format="auto" ' +
+                            'data-full-width-responsive="true"></ins>';
+
+                } else if (type === 'fixed') {
+					var ad_slot = params[3];
+					var slot_width = params[1];
+					var slot_height = params[2];
+					
+					if (true)
+						return '<ins class="adsbygoogle"' +
+							'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+							'data-ad-client="ca-pub-4567774508435145" ' +
+							'data-ad-slot="' + ad_slot + '"' +
+							'data-ad-format="auto"></ins>';
+					else
+						return '<ins class="adsbygoogle" ' +
+                            'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + ad_slot + '"></ins>';
+
+                } else {
+                    return '';
+                }
+            }
+
+            var bbox_html =
+                '<div id="bbox" style="display: flex; position: absolute; width: 100%; height: 100%; pointer-events: none; flex-direction: ' + (landscape ? 'row' : 'column') + ';">' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot1" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner1_param) +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="bbox-slot-mid" style="flex: 0; flex-basis: ' + Math.round(miblock_size_ratio * 100.0) + (landscape ? 'vw' : 'vh') + ';"></div>' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot2" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner2_param) +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            var bbox = document.createElement('div');
+            bbox.innerHTML = bbox_html;
+
+            document.getElementById('game-container').appendChild(bbox.querySelector('#bbox')); // game-container
+
+			/*var banner1_params = banner1_param.split('|');
+			var bboxes = document.getElementsByClassName('adsbygoogle');
+			if (banner1_params[0] === 'fixed')
+				WatchFillrate(bboxes[0], banner1_params[1], banner1_params[2]);
+			var banner2_params = banner2_param.split('|');
+			if (banner2_params[0] === 'fixed')
+				WatchFillrate(bboxes[1], banner2_params[1], banner2_params[2]);*/
+
+            // https://stackoverflow.com/questions/25095912/how-do-you-use-multiple-adsense-units-on-one-page
+            adsbygoogle = [{}, {}];
+
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+			script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+			// FIXME: below causing error on load:
+            //script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4567774508435145';
+			//script.setAttribute('crossOrigin', 'anonymous');
+            document.body.appendChild(script);
+
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+        }
+
+        function JS_HideAdsenseBanners() {
+            var bbox = document.getElementById('bbox');
+            bbox.parentNode.removeChild(bbox);
+        }
+
+        function JS_OnLobbyShown() {
+        }
+
+        function JS_OnMatchFinished() {
+        }
+
+        function EmbedPrompt() {
+
+            var url = "//clash3d.com/embed/vegas/";
+            prompt('Desktop and Mobile ready (landscape+portrait modes). Set any width/height you like. Backed by Cloudflare CDN.', '<iframe src="' + url + '" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>');
+            return false;
+
+        }
+
+        function DownloadStub() {
+            alert('Download option is not currently available, please come back later.');
+            /*<span id="footer-download"><a href="javascript:void(0)" onclick="return DownloadStub()" target="_blank" rel="nofollow">Download</a>&nbsp;|&nbsp;</span>*/
+            return false;
+        }
+
+        function UpdateVerticalHeight() {
+            //console.log('setting body min-height to', window.innerHeight);
+            document.body.style.minHeight = '' + window.innerHeight + 'px';
+        }
+
+        // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        window.addEventListener('resize', UpdateVerticalHeight);
+        UpdateVerticalHeight();
+
+		function SetupServiceWorker() {
+			if (('serviceWorker' in navigator) && document.location.protocol === 'https:')
+				(function () {
+					// https://developers.google.com/web/fundamentals/app-install-banners/
+					let deferredPrompt;
+					let game_iframe = document.getElementById('game-iframe').contentWindow;
+
+					window.addEventListener('beforeinstallprompt', (e) => {
+						// Prevent Chrome 67 and earlier from automatically showing the prompt
+						e.preventDefault();
+						// Stash the event so it can be triggered later.
+						deferredPrompt = e;
+						game_iframe.display_pwa_button = true;
+					});
+
+					window.addEventListener('appinstalled', function (event) {
+						console.log('User installed PWA');
+						gtag('event', 'installed', {
+							'event_category': 'PWA',
+							'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+						});
+					});
+
+					game_iframe.JS_InstallAsPWA = function () {
+						if (!deferredPrompt)
+							return;
+
+						// Show the prompt
+						deferredPrompt.prompt();
+
+						// Wait for the user to respond to the prompt
+						deferredPrompt.userChoice
+							.then((choiceResult) => {
+								if (choiceResult.outcome === 'accepted') {
+									console.log('User accepted the A2HS prompt');
+									gtag('event', 'accepted', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+
+								} else {
+									console.log('User denied the A2HS prompt');
+									gtag('event', 'denied', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+								}
+
+								deferredPrompt = null;
+								game_iframe.display_pwa_button = false;
+							});
+					};
+
+					if ('serviceWorker' in navigator) {
+						console.log("registering PWA service worker...");
+						navigator.serviceWorker
+							.register('/pwa-service-worker.js')
+							.then(function() {
+								console.log('PWA Service Worker registered');
+							});
+					}
+				})();
+		}
+
+		window.onload = function () {
+			setTimeout(function () {
+				document.getElementById('game-container').innerHTML =
+					 '<iframe id="game-iframe"' +
+							'title="vegas clash 3d"' +
+							'src="/embed/vegas/index.html?fb_locale=en&invite=(none)"' +
+							'style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true" >' +
+						'</iframe>';
+
+				SetupServiceWorker();
+			}, 1000);
+		};
+
+        setTimeout(function () {
+            LoadScript('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bee7589717a5c00');
+            //LoadScript('https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=622353294499625&autoLogAppEvents=1');
+        }, 6000);
+
+    </script>
+<body oncontextmenu="return false;" style="min-height: 461px;">
+    <div id="fb-root"></div>
+
+    <div id="viewport" class="main">
+        <div id="game-container"><iframe id="game-iframe" title="vegas clash 3d" src="/embed/vegas/index.html?fb_locale=en&amp;invite=(none)" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe></div>
+
+        <div class="footer">
+			<span id="footer-embed"><a href="javascript:void(0)" onclick="return EmbedPrompt()" target="_blank" rel="nofollow">Embed</a>&nbsp;|&nbsp;</span>
+			<span id="footer-contact"><a href="https://3wayint.com" rel="noopener" target="_blank">Contacts</a></span>
+
+			<a href="/">
+				<img id="footer-site-logo" width="110" style="padding-left: 0.5em;" src="/img/clash3dcom_footer.png" alt="Clash3D.com">
+			</a>
+
+			<div style="padding-left: 0.5em; padding-top: 0.3em; display: flex; align-items: center;">
+				<div class="addthis_inline_share_toolbox_4rwo"></div>
+			</div>
+
+			<a href="/vegasclash3d" alt="Vegas Clash 3D"><img class="button" alt="Vegas Clash 3D" src="/img/vegas_menubutton.png"></a>
+			<a href="/winterclash3d" alt="Winter Clash 3D"><img class="button" alt="Winter Clash 3D" src="/img/winter_menubutton.png"></a>
+			<a href="/moonclash3d" alt="Moon Clash Heroes"><img class="button" alt="Moon Clash Heroes" src="/img/moon_menubutton.png"></a>
+
+	
+		</div>
+    </div>
+
+	<div class="right-block">
+		<div class="games-menu">
+			<a href="/" alt="Clash3D.com"><img class="logo" alt="Clash3D.com" src="/img/clash3dcom_menu.png"></a>
+			
+			<a href="/winterclash3d" alt="Winter Clash 3D"><img class="button" alt="Winter Clash 3D" src="/img/winter_menubutton.png"></a>
+			<a href="/airportclash3d" alt="Airport Clash 3D"><img class="button" alt="Airport Clash 3D" src="/img/airport_menubutton.png"></a>						
+			<a href="/subwayclash3d" alt="Subway Clash Remastered"><img class="button" alt="Subway Clash Remastered" src="/img/subway_menubutton.png"></a>
+			<a href="/sniperclash3d" alt="Sniper Clash 3D"><img class="button" alt="Sniper Clash 3D" src="/img/sniper_menubutton.png"></a>
+			<a href="/subwaytwoclash3d" alt="Subway Clash 2"><img class="button" alt="Subway Clash 2" src="/img/subway2_menubutton.png"></a>			
+			<a href="/ninjaclash3d" alt="Ninja Clash Heroes"><img class="button" alt="Ninja Clash Heroes" src="/img/ninja_menubutton.png"></a>
+			<a href="/vegasclash3d" alt="Vegas Clash 3D"><img class="button" alt="Vegas Clash 3D" src="/img/vegas_menubutton.png"></a>						
+			<a href="/moonclash3d" alt="Moon Clash Heroes"><img class="button" alt="Moon Clash Heroes" src="/img/moon_menubutton.png"></a>
+			<a href="/zombieclash3d" alt="Zombie Clash 3D"><img class="button" alt="Zombie Clash 3D" src="/img/zombie_menubutton.png"></a>
+			<a href="/farmclash3d" alt="Farm Clash 3D"><img class="button" alt="Farm Clash 3D" src="/img/farm_menubutton.png"></a>
+			<a href="/rocketclash3d" alt="Rocket Clash 3D"><img class="button" alt="Rocket Clash 3D" src="/img/rocket_menubutton.png"></a>
+			
+			<!--a href="https://teespring.com/stores/clash-3d" target="_blank" alt="Clash3D merch" rel="nofollow"><img class="button" src="/img/merch_menubutton.png"></a-->
+
+
+
+		</div>
+	</div>
+
+
+    <script type="text/javascript">
+		function InjectAdinplayIframedBanner(div_tag, width, height) {
+			var banner_id = 'clash3d-com_' + width + 'x' + height;
+			var iframe_tag = 'aip' + RandomInt();
+
+			document.getElementById(div_tag).innerHTML =
+				'<iframe id="' + iframe_tag + '" src="//clash3d.com/aip/aipbnr10.html?id=' + encodeURIComponent(banner_id) + '" ' +
+				'frameborder="0" scrolling="no" marginwidth="0" marginheight="0" width="' + width + '" height="' + height + '" referrerpolicy="no-referrer" ' +
+				'></iframe>'
+				;
+		}
+
+		function WatchFillrate(targetNode, width, height) {
+			const config = { attributes: false, childList: true, subtree: false };
+			var filler_div;
+
+			const timeout_id = setTimeout(function () {
+				console.debug('WatchFillrate: no fill');
+
+				filler_div = document.createElement('div');
+				filler_div.setAttribute('id', 'filler');
+				filler_div.setAttribute("style", "width: 100%; height: 100%; z-index: 0; position: absolute; left: 0; top: 0;");
+				document.body.insertBefore(filler_div, targetNode);
+
+				InjectAdinplayIframedBanner(filler_div, width, height);
+			}, 1700);
+
+			const callback = function(mutationsList, observer) {
+				for (const mutation of mutationsList) {
+					if (mutation.type !== 'childList')
+						continue;
+
+					console.debug('WatchFillrate: mutation encounter');
+
+					if (filler_div) {
+						console.debug('WatchFillrate: removing previously injected filler');
+						filler_div.parentNode.removeChild(filler_div);
+						observer.disconnect();
+
+					} else {
+						clearTimeout(timeout_id);
+					}
+
+					return;
+				}
+			};
+
+			const observer = new MutationObserver(callback);
+			observer.observe(targetNode, config);
+
+			console.debug('WatchFillrate: mutation observer started');
+		}
+
+        function JS_InjectAdsenseBanners(full_size, midblock_size, landscape, banner1_param, banner2_param) {
+            console.log('Adsense banners:', full_size, midblock_size, landscape, banner1_param, banner2_param);
+
+            var miblock_size_ratio = midblock_size / full_size;
+            if (miblock_size_ratio > 0.9)
+                return;
+
+            function generate_ins(param) {
+                var params = param.split('|');
+                var type = params[0];
+
+                if (type === 'responsive') {
+                    return '<ins class="adsbygoogle" ' +
+                            'style="display:block; width: 100%; height: 100%;" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + params[1] + '" ' +
+                            'data-ad-format="auto" ' +
+                            'data-full-width-responsive="true"></ins>';
+
+                } else if (type === 'fixed') {
+					var ad_slot = params[3];
+					var slot_width = params[1];
+					var slot_height = params[2];
+					
+					if (true)
+						return '<ins class="adsbygoogle"' +
+							'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+							'data-ad-client="ca-pub-4567774508435145" ' +
+							'data-ad-slot="' + ad_slot + '"' +
+							'data-ad-format="auto"></ins>';
+					else
+						return '<ins class="adsbygoogle" ' +
+                            'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + ad_slot + '"></ins>';
+
+                } else {
+                    return '';
+                }
+            }
+
+            var bbox_html =
+                '<div id="bbox" style="display: flex; position: absolute; width: 100%; height: 100%; pointer-events: none; flex-direction: ' + (landscape ? 'row' : 'column') + ';">' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot1" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner1_param) +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="bbox-slot-mid" style="flex: 0; flex-basis: ' + Math.round(miblock_size_ratio * 100.0) + (landscape ? 'vw' : 'vh') + ';"></div>' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot2" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner2_param) +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            var bbox = document.createElement('div');
+            bbox.innerHTML = bbox_html;
+
+            document.getElementById('game-container').appendChild(bbox.querySelector('#bbox')); // game-container
+
+			/*var banner1_params = banner1_param.split('|');
+			var bboxes = document.getElementsByClassName('adsbygoogle');
+			if (banner1_params[0] === 'fixed')
+				WatchFillrate(bboxes[0], banner1_params[1], banner1_params[2]);
+			var banner2_params = banner2_param.split('|');
+			if (banner2_params[0] === 'fixed')
+				WatchFillrate(bboxes[1], banner2_params[1], banner2_params[2]);*/
+
+            // https://stackoverflow.com/questions/25095912/how-do-you-use-multiple-adsense-units-on-one-page
+            adsbygoogle = [{}, {}];
+
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+			script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+			// FIXME: below causing error on load:
+            //script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4567774508435145';
+			//script.setAttribute('crossOrigin', 'anonymous');
+            document.body.appendChild(script);
+
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+        }
+
+        function JS_HideAdsenseBanners() {
+            var bbox = document.getElementById('bbox');
+            bbox.parentNode.removeChild(bbox);
+        }
+
+        function JS_OnLobbyShown() {
+        }
+
+        function JS_OnMatchFinished() {
+        }
+
+        function EmbedPrompt() {
+
+            var url = "//clash3d.com/embed/vegas/";
+            prompt('Desktop and Mobile ready (landscape+portrait modes). Set any width/height you like. Backed by Cloudflare CDN.', '<iframe src="' + url + '" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>');
+            return false;
+
+        }
+
+        function DownloadStub() {
+            alert('Download option is not currently available, please come back later.');
+            /*<span id="footer-download"><a href="javascript:void(0)" onclick="return DownloadStub()" target="_blank" rel="nofollow">Download</a>&nbsp;|&nbsp;</span>*/
+            return false;
+        }
+
+        function UpdateVerticalHeight() {
+            //console.log('setting body min-height to', window.innerHeight);
+            document.body.style.minHeight = '' + window.innerHeight + 'px';
+        }
+
+        // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        window.addEventListener('resize', UpdateVerticalHeight);
+        UpdateVerticalHeight();
+
+		function SetupServiceWorker() {
+			if (('serviceWorker' in navigator) && document.location.protocol === 'https:')
+				(function () {
+					// https://developers.google.com/web/fundamentals/app-install-banners/
+					let deferredPrompt;
+					let game_iframe = document.getElementById('game-iframe').contentWindow;
+
+					window.addEventListener('beforeinstallprompt', (e) => {
+						// Prevent Chrome 67 and earlier from automatically showing the prompt
+						e.preventDefault();
+						// Stash the event so it can be triggered later.
+						deferredPrompt = e;
+						game_iframe.display_pwa_button = true;
+					});
+
+					window.addEventListener('appinstalled', function (event) {
+						console.log('User installed PWA');
+						gtag('event', 'installed', {
+							'event_category': 'PWA',
+							'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+						});
+					});
+
+					game_iframe.JS_InstallAsPWA = function () {
+						if (!deferredPrompt)
+							return;
+
+						// Show the prompt
+						deferredPrompt.prompt();
+
+						// Wait for the user to respond to the prompt
+						deferredPrompt.userChoice
+							.then((choiceResult) => {
+								if (choiceResult.outcome === 'accepted') {
+									console.log('User accepted the A2HS prompt');
+									gtag('event', 'accepted', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+
+								} else {
+									console.log('User denied the A2HS prompt');
+									gtag('event', 'denied', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+								}
+
+								deferredPrompt = null;
+								game_iframe.display_pwa_button = false;
+							});
+					};
+
+					if ('serviceWorker' in navigator) {
+						console.log("registering PWA service worker...");
+						navigator.serviceWorker
+							.register('/pwa-service-worker.js')
+							.then(function() {
+								console.log('PWA Service Worker registered');
+							});
+					}
+				})();
+		}
+
+		window.onload = function () {
+			setTimeout(function () {
+				document.getElementById('game-container').innerHTML =
+					 '<iframe id="game-iframe"' +
+							'title="vegas clash 3d"' +
+							'src="/embed/vegas/index.html?fb_locale=en&invite=(none)"' +
+							'style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true" >' +
+						'</iframe>';
+
+				SetupServiceWorker();
+			}, 1000);
+		};
+
+        setTimeout(function () {
+            LoadScript('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bee7589717a5c00');
+            //LoadScript('https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=622353294499625&autoLogAppEvents=1');
+        }, 6000);
+
+    </script>
+
+
+<ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none !important;" data-ad-status="unfilled"><div id="aswift_0_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: medium; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="https://googleads.g.doubleclick.net/pagead/ads?client=4567774508435145&amp;output=html&amp;adk=1812271804&amp;adf=3025194257&amp;lmt=1707255600&amp;plat=3%3A16%2C4%3A16%2C9%3A32776%2C16%3A8388608%2C17%3A32%2C24%3A32%2C25%3A32%2C30%3A1081344%2C32%3A32%2C41%3A32%2C42%3A32&amp;format=0x0&amp;url=https%3A%2F%2Fclash3d.com%2Fvegasclash3d&amp;pra=5&amp;wgl=1&amp;easpi=0&amp;asro=0&amp;aslmt=0.4&amp;asamt=-1&amp;asedf=0&amp;asefa=1&amp;aseiel=1~2~4~6~9~14&amp;aslcwct=150&amp;asacwct=25&amp;dt=1707255600667&amp;bpp=2&amp;bdt=155&amp;idt=232&amp;shv=r20240201&amp;mjsv=m202401300101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;nras=1&amp;correlator=1586921542247&amp;frm=20&amp;pv=2&amp;ga_vid=1286995081.1707255495&amp;ga_sid=1707255601&amp;ga_hid=952467890&amp;ga_fc=1&amp;u_tz=-360&amp;u_his=4&amp;u_h=1152&amp;u_w=2048&amp;u_ah=1042&amp;u_aw=2048&amp;u_cd=24&amp;u_sd=2&amp;adx=-12245933&amp;ady=-12245933&amp;biw=1730&amp;bih=961&amp;scr_x=0&amp;scr_y=0&amp;eid=44759876%2C44759927%2C44808398%2C31080650%2C31080887%2C95324155%2C95324161%2C95324266&amp;oid=2&amp;pvsid=4075857265335490&amp;tmod=456934081&amp;uas=0&amp;nvt=1&amp;fsapi=1&amp;ref=https%3A%2F%2Fclash3d.com%2F&amp;fc=1920&amp;brdim=168%2C25%2C168%2C25%2C2048%2C25%2C1730%2C1041%2C1730%2C961&amp;vis=1&amp;rsz=%7C%7Cs%7C&amp;abl=NS&amp;fu=32768&amp;bc=31&amp;bz=1&amp;ifi=1&amp;uci=a!1&amp;fsb=1&amp;dtd=247" data-google-container-id="a!1" data-load-complete="true"></iframe></div></ins><iframe src="https://www.google.com/recaptcha/api2/aframe" width="0" height="0" style="display: none;"></iframe></body>
+<script type="text/javascript">
+		function InjectAdinplayIframedBanner(div_tag, width, height) {
+			var banner_id = 'clash3d-com_' + width + 'x' + height;
+			var iframe_tag = 'aip' + RandomInt();
+
+			document.getElementById(div_tag).innerHTML =
+				'<iframe id="' + iframe_tag + '" src="//clash3d.com/aip/aipbnr10.html?id=' + encodeURIComponent(banner_id) + '" ' +
+				'frameborder="0" scrolling="no" marginwidth="0" marginheight="0" width="' + width + '" height="' + height + '" referrerpolicy="no-referrer" ' +
+				'></iframe>'
+				;
+		}
+
+		function WatchFillrate(targetNode, width, height) {
+			const config = { attributes: false, childList: true, subtree: false };
+			var filler_div;
+
+			const timeout_id = setTimeout(function () {
+				console.debug('WatchFillrate: no fill');
+
+				filler_div = document.createElement('div');
+				filler_div.setAttribute('id', 'filler');
+				filler_div.setAttribute("style", "width: 100%; height: 100%; z-index: 0; position: absolute; left: 0; top: 0;");
+				document.body.insertBefore(filler_div, targetNode);
+
+				InjectAdinplayIframedBanner(filler_div, width, height);
+			}, 1700);
+
+			const callback = function(mutationsList, observer) {
+				for (const mutation of mutationsList) {
+					if (mutation.type !== 'childList')
+						continue;
+
+					console.debug('WatchFillrate: mutation encounter');
+
+					if (filler_div) {
+						console.debug('WatchFillrate: removing previously injected filler');
+						filler_div.parentNode.removeChild(filler_div);
+						observer.disconnect();
+
+					} else {
+						clearTimeout(timeout_id);
+					}
+
+					return;
+				}
+			};
+
+			const observer = new MutationObserver(callback);
+			observer.observe(targetNode, config);
+
+			console.debug('WatchFillrate: mutation observer started');
+		}
+
+        function JS_InjectAdsenseBanners(full_size, midblock_size, landscape, banner1_param, banner2_param) {
+            console.log('Adsense banners:', full_size, midblock_size, landscape, banner1_param, banner2_param);
+
+            var miblock_size_ratio = midblock_size / full_size;
+            if (miblock_size_ratio > 0.9)
+                return;
+
+            function generate_ins(param) {
+                var params = param.split('|');
+                var type = params[0];
+
+                if (type === 'responsive') {
+                    return '<ins class="adsbygoogle" ' +
+                            'style="display:block; width: 100%; height: 100%;" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + params[1] + '" ' +
+                            'data-ad-format="auto" ' +
+                            'data-full-width-responsive="true"></ins>';
+
+                } else if (type === 'fixed') {
+					var ad_slot = params[3];
+					var slot_width = params[1];
+					var slot_height = params[2];
+					
+					if (true)
+						return '<ins class="adsbygoogle"' +
+							'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+							'data-ad-client="ca-pub-4567774508435145" ' +
+							'data-ad-slot="' + ad_slot + '"' +
+							'data-ad-format="auto"></ins>';
+					else
+						return '<ins class="adsbygoogle" ' +
+                            'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + ad_slot + '"></ins>';
+
+                } else {
+                    return '';
+                }
+            }
+
+            var bbox_html =
+                '<div id="bbox" style="display: flex; position: absolute; width: 100%; height: 100%; pointer-events: none; flex-direction: ' + (landscape ? 'row' : 'column') + ';">' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot1" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner1_param) +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="bbox-slot-mid" style="flex: 0; flex-basis: ' + Math.round(miblock_size_ratio * 100.0) + (landscape ? 'vw' : 'vh') + ';"></div>' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot2" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner2_param) +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            var bbox = document.createElement('div');
+            bbox.innerHTML = bbox_html;
+
+            document.getElementById('game-container').appendChild(bbox.querySelector('#bbox')); // game-container
+
+			/*var banner1_params = banner1_param.split('|');
+			var bboxes = document.getElementsByClassName('adsbygoogle');
+			if (banner1_params[0] === 'fixed')
+				WatchFillrate(bboxes[0], banner1_params[1], banner1_params[2]);
+			var banner2_params = banner2_param.split('|');
+			if (banner2_params[0] === 'fixed')
+				WatchFillrate(bboxes[1], banner2_params[1], banner2_params[2]);*/
+
+            // https://stackoverflow.com/questions/25095912/how-do-you-use-multiple-adsense-units-on-one-page
+            adsbygoogle = [{}, {}];
+
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+			script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+			// FIXME: below causing error on load:
+            //script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4567774508435145';
+			//script.setAttribute('crossOrigin', 'anonymous');
+            document.body.appendChild(script);
+
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+        }
+
+        function JS_HideAdsenseBanners() {
+            var bbox = document.getElementById('bbox');
+            bbox.parentNode.removeChild(bbox);
+        }
+
+        function JS_OnLobbyShown() {
+        }
+
+        function JS_OnMatchFinished() {
+        }
+
+        function EmbedPrompt() {
+
+            var url = "//clash3d.com/embed/vegas/";
+            prompt('Desktop and Mobile ready (landscape+portrait modes). Set any width/height you like. Backed by Cloudflare CDN.', '<iframe src="' + url + '" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>');
+            return false;
+
+        }
+
+        function DownloadStub() {
+            alert('Download option is not currently available, please come back later.');
+            /*<span id="footer-download"><a href="javascript:void(0)" onclick="return DownloadStub()" target="_blank" rel="nofollow">Download</a>&nbsp;|&nbsp;</span>*/
+            return false;
+        }
+
+        function UpdateVerticalHeight() {
+            //console.log('setting body min-height to', window.innerHeight);
+            document.body.style.minHeight = '' + window.innerHeight + 'px';
+        }
+
+        // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        window.addEventListener('resize', UpdateVerticalHeight);
+        UpdateVerticalHeight();
+
+		function SetupServiceWorker() {
+			if (('serviceWorker' in navigator) && document.location.protocol === 'https:')
+				(function () {
+					// https://developers.google.com/web/fundamentals/app-install-banners/
+					let deferredPrompt;
+					let game_iframe = document.getElementById('game-iframe').contentWindow;
+
+					window.addEventListener('beforeinstallprompt', (e) => {
+						// Prevent Chrome 67 and earlier from automatically showing the prompt
+						e.preventDefault();
+						// Stash the event so it can be triggered later.
+						deferredPrompt = e;
+						game_iframe.display_pwa_button = true;
+					});
+
+					window.addEventListener('appinstalled', function (event) {
+						console.log('User installed PWA');
+						gtag('event', 'installed', {
+							'event_category': 'PWA',
+							'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+						});
+					});
+
+					game_iframe.JS_InstallAsPWA = function () {
+						if (!deferredPrompt)
+							return;
+
+						// Show the prompt
+						deferredPrompt.prompt();
+
+						// Wait for the user to respond to the prompt
+						deferredPrompt.userChoice
+							.then((choiceResult) => {
+								if (choiceResult.outcome === 'accepted') {
+									console.log('User accepted the A2HS prompt');
+									gtag('event', 'accepted', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+
+								} else {
+									console.log('User denied the A2HS prompt');
+									gtag('event', 'denied', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+								}
+
+								deferredPrompt = null;
+								game_iframe.display_pwa_button = false;
+							});
+					};
+
+					if ('serviceWorker' in navigator) {
+						console.log("registering PWA service worker...");
+						navigator.serviceWorker
+							.register('/pwa-service-worker.js')
+							.then(function() {
+								console.log('PWA Service Worker registered');
+							});
+					}
+				})();
+		}
+
+		window.onload = function () {
+			setTimeout(function () {
+				document.getElementById('game-container').innerHTML =
+					 '<iframe id="game-iframe"' +
+							'title="vegas clash 3d"' +
+							'src="/embed/vegas/index.html?fb_locale=en&invite=(none)"' +
+							'style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true" >' +
+						'</iframe>';
+
+				SetupServiceWorker();
+			}, 1000);
+		};
+
+        setTimeout(function () {
+            LoadScript('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bee7589717a5c00');
+            //LoadScript('https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=622353294499625&autoLogAppEvents=1');
+        }, 6000);
+
+    </script>
+<div id="game-container"><iframe id="game-iframe" title="vegas clash 3d" src="/embed/vegas/index.html?fb_locale=en&amp;invite=(none)" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe></div>
+<body oncontextmenu="return false;" style="min-height: 461px;">
+    <div id="fb-root"></div>
+
+    <div id="viewport" class="main">
+        <div id="game-container"><iframe id="game-iframe" title="vegas clash 3d" src="/embed/vegas/index.html?fb_locale=en&amp;invite=(none)" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe></div>
+
+        <div class="footer">
+			<span id="footer-embed"><a href="javascript:void(0)" onclick="return EmbedPrompt()" target="_blank" rel="nofollow">Embed</a>&nbsp;|&nbsp;</span>
+			<span id="footer-contact"><a href="https://3wayint.com" rel="noopener" target="_blank">Contacts</a></span>
+
+			<a href="/">
+				<img id="footer-site-logo" width="110" style="padding-left: 0.5em;" src="/img/clash3dcom_footer.png" alt="Clash3D.com">
+			</a>
+
+			<div style="padding-left: 0.5em; padding-top: 0.3em; display: flex; align-items: center;">
+				<div class="addthis_inline_share_toolbox_4rwo"></div>
+			</div>
+
+			<a href="/vegasclash3d" alt="Vegas Clash 3D"><img class="button" alt="Vegas Clash 3D" src="/img/vegas_menubutton.png"></a>
+			<a href="/winterclash3d" alt="Winter Clash 3D"><img class="button" alt="Winter Clash 3D" src="/img/winter_menubutton.png"></a>
+			<a href="/moonclash3d" alt="Moon Clash Heroes"><img class="button" alt="Moon Clash Heroes" src="/img/moon_menubutton.png"></a>
+
+	
+		</div>
+    </div>
+
+	<div class="right-block">
+		<div class="games-menu">
+			<a href="/" alt="Clash3D.com"><img class="logo" alt="Clash3D.com" src="/img/clash3dcom_menu.png"></a>
+			
+			<a href="/winterclash3d" alt="Winter Clash 3D"><img class="button" alt="Winter Clash 3D" src="/img/winter_menubutton.png"></a>
+			<a href="/airportclash3d" alt="Airport Clash 3D"><img class="button" alt="Airport Clash 3D" src="/img/airport_menubutton.png"></a>						
+			<a href="/subwayclash3d" alt="Subway Clash Remastered"><img class="button" alt="Subway Clash Remastered" src="/img/subway_menubutton.png"></a>
+			<a href="/sniperclash3d" alt="Sniper Clash 3D"><img class="button" alt="Sniper Clash 3D" src="/img/sniper_menubutton.png"></a>
+			<a href="/subwaytwoclash3d" alt="Subway Clash 2"><img class="button" alt="Subway Clash 2" src="/img/subway2_menubutton.png"></a>			
+			<a href="/ninjaclash3d" alt="Ninja Clash Heroes"><img class="button" alt="Ninja Clash Heroes" src="/img/ninja_menubutton.png"></a>
+			<a href="/vegasclash3d" alt="Vegas Clash 3D"><img class="button" alt="Vegas Clash 3D" src="/img/vegas_menubutton.png"></a>						
+			<a href="/moonclash3d" alt="Moon Clash Heroes"><img class="button" alt="Moon Clash Heroes" src="/img/moon_menubutton.png"></a>
+			<a href="/zombieclash3d" alt="Zombie Clash 3D"><img class="button" alt="Zombie Clash 3D" src="/img/zombie_menubutton.png"></a>
+			<a href="/farmclash3d" alt="Farm Clash 3D"><img class="button" alt="Farm Clash 3D" src="/img/farm_menubutton.png"></a>
+			<a href="/rocketclash3d" alt="Rocket Clash 3D"><img class="button" alt="Rocket Clash 3D" src="/img/rocket_menubutton.png"></a>
+			
+			<!--a href="https://teespring.com/stores/clash-3d" target="_blank" alt="Clash3D merch" rel="nofollow"><img class="button" src="/img/merch_menubutton.png"></a-->
+
+
+
+		</div>
+	</div>
+
+
+    <script type="text/javascript">
+		function InjectAdinplayIframedBanner(div_tag, width, height) {
+			var banner_id = 'clash3d-com_' + width + 'x' + height;
+			var iframe_tag = 'aip' + RandomInt();
+
+			document.getElementById(div_tag).innerHTML =
+				'<iframe id="' + iframe_tag + '" src="//clash3d.com/aip/aipbnr10.html?id=' + encodeURIComponent(banner_id) + '" ' +
+				'frameborder="0" scrolling="no" marginwidth="0" marginheight="0" width="' + width + '" height="' + height + '" referrerpolicy="no-referrer" ' +
+				'></iframe>'
+				;
+		}
+
+		function WatchFillrate(targetNode, width, height) {
+			const config = { attributes: false, childList: true, subtree: false };
+			var filler_div;
+
+			const timeout_id = setTimeout(function () {
+				console.debug('WatchFillrate: no fill');
+
+				filler_div = document.createElement('div');
+				filler_div.setAttribute('id', 'filler');
+				filler_div.setAttribute("style", "width: 100%; height: 100%; z-index: 0; position: absolute; left: 0; top: 0;");
+				document.body.insertBefore(filler_div, targetNode);
+
+				InjectAdinplayIframedBanner(filler_div, width, height);
+			}, 1700);
+
+			const callback = function(mutationsList, observer) {
+				for (const mutation of mutationsList) {
+					if (mutation.type !== 'childList')
+						continue;
+
+					console.debug('WatchFillrate: mutation encounter');
+
+					if (filler_div) {
+						console.debug('WatchFillrate: removing previously injected filler');
+						filler_div.parentNode.removeChild(filler_div);
+						observer.disconnect();
+
+					} else {
+						clearTimeout(timeout_id);
+					}
+
+					return;
+				}
+			};
+
+			const observer = new MutationObserver(callback);
+			observer.observe(targetNode, config);
+
+			console.debug('WatchFillrate: mutation observer started');
+		}
+
+        function JS_InjectAdsenseBanners(full_size, midblock_size, landscape, banner1_param, banner2_param) {
+            console.log('Adsense banners:', full_size, midblock_size, landscape, banner1_param, banner2_param);
+
+            var miblock_size_ratio = midblock_size / full_size;
+            if (miblock_size_ratio > 0.9)
+                return;
+
+            function generate_ins(param) {
+                var params = param.split('|');
+                var type = params[0];
+
+                if (type === 'responsive') {
+                    return '<ins class="adsbygoogle" ' +
+                            'style="display:block; width: 100%; height: 100%;" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + params[1] + '" ' +
+                            'data-ad-format="auto" ' +
+                            'data-full-width-responsive="true"></ins>';
+
+                } else if (type === 'fixed') {
+					var ad_slot = params[3];
+					var slot_width = params[1];
+					var slot_height = params[2];
+					
+					if (true)
+						return '<ins class="adsbygoogle"' +
+							'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+							'data-ad-client="ca-pub-4567774508435145" ' +
+							'data-ad-slot="' + ad_slot + '"' +
+							'data-ad-format="auto"></ins>';
+					else
+						return '<ins class="adsbygoogle" ' +
+                            'style="display:inline-block;width:' + slot_width + 'px;height:' + slot_height + 'px" ' +
+                            'data-ad-client="ca-pub-4567774508435145" ' +
+                            'data-ad-slot="' + ad_slot + '"></ins>';
+
+                } else {
+                    return '';
+                }
+            }
+
+            var bbox_html =
+                '<div id="bbox" style="display: flex; position: absolute; width: 100%; height: 100%; pointer-events: none; flex-direction: ' + (landscape ? 'row' : 'column') + ';">' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot1" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner1_param) +
+                        '</div>' +
+                    '</div>' +
+                    '<div id="bbox-slot-mid" style="flex: 0; flex-basis: ' + Math.round(miblock_size_ratio * 100.0) + (landscape ? 'vw' : 'vh') + ';"></div>' +
+                    '<div style="flex: 1;">' +
+                        '<div id="bbox-slot2" style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center;">' +
+                            generate_ins(banner2_param) +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            var bbox = document.createElement('div');
+            bbox.innerHTML = bbox_html;
+
+            document.getElementById('game-container').appendChild(bbox.querySelector('#bbox')); // game-container
+
+			/*var banner1_params = banner1_param.split('|');
+			var bboxes = document.getElementsByClassName('adsbygoogle');
+			if (banner1_params[0] === 'fixed')
+				WatchFillrate(bboxes[0], banner1_params[1], banner1_params[2]);
+			var banner2_params = banner2_param.split('|');
+			if (banner2_params[0] === 'fixed')
+				WatchFillrate(bboxes[1], banner2_params[1], banner2_params[2]);*/
+
+            // https://stackoverflow.com/questions/25095912/how-do-you-use-multiple-adsense-units-on-one-page
+            adsbygoogle = [{}, {}];
+
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+			script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+			// FIXME: below causing error on load:
+            //script.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4567774508435145';
+			//script.setAttribute('crossOrigin', 'anonymous');
+            document.body.appendChild(script);
+
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+            gtag('event', 'adbanner_shown', {
+                'event_category': 'monetization',
+                'event_label': "adsense"
+            });
+        }
+
+        function JS_HideAdsenseBanners() {
+            var bbox = document.getElementById('bbox');
+            bbox.parentNode.removeChild(bbox);
+        }
+
+        function JS_OnLobbyShown() {
+        }
+
+        function JS_OnMatchFinished() {
+        }
+
+        function EmbedPrompt() {
+
+            var url = "//clash3d.com/embed/vegas/";
+            prompt('Desktop and Mobile ready (landscape+portrait modes). Set any width/height you like. Backed by Cloudflare CDN.', '<iframe src="' + url + '" style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>');
+            return false;
+
+        }
+
+        function DownloadStub() {
+            alert('Download option is not currently available, please come back later.');
+            /*<span id="footer-download"><a href="javascript:void(0)" onclick="return DownloadStub()" target="_blank" rel="nofollow">Download</a>&nbsp;|&nbsp;</span>*/
+            return false;
+        }
+
+        function UpdateVerticalHeight() {
+            //console.log('setting body min-height to', window.innerHeight);
+            document.body.style.minHeight = '' + window.innerHeight + 'px';
+        }
+
+        // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+        window.addEventListener('resize', UpdateVerticalHeight);
+        UpdateVerticalHeight();
+
+		function SetupServiceWorker() {
+			if (('serviceWorker' in navigator) && document.location.protocol === 'https:')
+				(function () {
+					// https://developers.google.com/web/fundamentals/app-install-banners/
+					let deferredPrompt;
+					let game_iframe = document.getElementById('game-iframe').contentWindow;
+
+					window.addEventListener('beforeinstallprompt', (e) => {
+						// Prevent Chrome 67 and earlier from automatically showing the prompt
+						e.preventDefault();
+						// Stash the event so it can be triggered later.
+						deferredPrompt = e;
+						game_iframe.display_pwa_button = true;
+					});
+
+					window.addEventListener('appinstalled', function (event) {
+						console.log('User installed PWA');
+						gtag('event', 'installed', {
+							'event_category': 'PWA',
+							'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+						});
+					});
+
+					game_iframe.JS_InstallAsPWA = function () {
+						if (!deferredPrompt)
+							return;
+
+						// Show the prompt
+						deferredPrompt.prompt();
+
+						// Wait for the user to respond to the prompt
+						deferredPrompt.userChoice
+							.then((choiceResult) => {
+								if (choiceResult.outcome === 'accepted') {
+									console.log('User accepted the A2HS prompt');
+									gtag('event', 'accepted', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+
+								} else {
+									console.log('User denied the A2HS prompt');
+									gtag('event', 'denied', {
+										'event_category': 'PWA',
+										'event_label': '' + game_iframe.os.name + ' ' + game_iframe.os.version
+									});
+								}
+
+								deferredPrompt = null;
+								game_iframe.display_pwa_button = false;
+							});
+					};
+
+					if ('serviceWorker' in navigator) {
+						console.log("registering PWA service worker...");
+						navigator.serviceWorker
+							.register('/pwa-service-worker.js')
+							.then(function() {
+								console.log('PWA Service Worker registered');
+							});
+					}
+				})();
+		}
+
+		window.onload = function () {
+			setTimeout(function () {
+				document.getElementById('game-container').innerHTML =
+					 '<iframe id="game-iframe"' +
+							'title="vegas clash 3d"' +
+							'src="/embed/vegas/index.html?fb_locale=en&invite=(none)"' +
+							'style="width: 100%; height: 100%;" referrerpolicy="origin" frameborder="0" scrolling="no" allowfullscreen="true" >' +
+						'</iframe>';
+
+				SetupServiceWorker();
+			}, 1000);
+		};
+
+        setTimeout(function () {
+            LoadScript('//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bee7589717a5c00');
+            //LoadScript('https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=622353294499625&autoLogAppEvents=1');
+        }, 6000);
+
+    </script>
+
+
+<ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none !important;" data-ad-status="unfilled"><div id="aswift_0_host" tabindex="0" title="Advertisement" aria-label="Advertisement" style="border: medium; height: 0px; width: 0px; margin: 0px; padding: 0px; position: relative; visibility: visible; background-color: transparent; display: inline-block;"><iframe id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0;width:undefinedpx;height:undefinedpx;" sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-top-navigation-by-user-activation" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" src="https://googleads.g.doubleclick.net/pagead/ads?client=4567774508435145&amp;output=html&amp;adk=1812271804&amp;adf=3025194257&amp;lmt=1707255600&amp;plat=3%3A16%2C4%3A16%2C9%3A32776%2C16%3A8388608%2C17%3A32%2C24%3A32%2C25%3A32%2C30%3A1081344%2C32%3A32%2C41%3A32%2C42%3A32&amp;format=0x0&amp;url=https%3A%2F%2Fclash3d.com%2Fvegasclash3d&amp;pra=5&amp;wgl=1&amp;easpi=0&amp;asro=0&amp;aslmt=0.4&amp;asamt=-1&amp;asedf=0&amp;asefa=1&amp;aseiel=1~2~4~6~9~14&amp;aslcwct=150&amp;asacwct=25&amp;dt=1707255600667&amp;bpp=2&amp;bdt=155&amp;idt=232&amp;shv=r20240201&amp;mjsv=m202401300101&amp;ptt=9&amp;saldr=aa&amp;abxe=1&amp;nras=1&amp;correlator=1586921542247&amp;frm=20&amp;pv=2&amp;ga_vid=1286995081.1707255495&amp;ga_sid=1707255601&amp;ga_hid=952467890&amp;ga_fc=1&amp;u_tz=-360&amp;u_his=4&amp;u_h=1152&amp;u_w=2048&amp;u_ah=1042&amp;u_aw=2048&amp;u_cd=24&amp;u_sd=2&amp;adx=-12245933&amp;ady=-12245933&amp;biw=1730&amp;bih=961&amp;scr_x=0&amp;scr_y=0&amp;eid=44759876%2C44759927%2C44808398%2C31080650%2C31080887%2C95324155%2C95324161%2C95324266&amp;oid=2&amp;pvsid=4075857265335490&amp;tmod=456934081&amp;uas=0&amp;nvt=1&amp;fsapi=1&amp;ref=https%3A%2F%2Fclash3d.com%2F&amp;fc=1920&amp;brdim=168%2C25%2C168%2C25%2C2048%2C25%2C1730%2C1041%2C1730%2C961&amp;vis=1&amp;rsz=%7C%7Cs%7C&amp;abl=NS&amp;fu=32768&amp;bc=31&amp;bz=1&amp;ifi=1&amp;uci=a!1&amp;fsb=1&amp;dtd=247" data-google-container-id="a!1" data-load-complete="true"></iframe></div></ins><iframe src="https://www.google.com/recaptcha/api2/aframe" width="0" height="0" style="display: none;"></iframe></body>
